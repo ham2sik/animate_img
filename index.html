@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<title></title>
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=2, user-scalable=yes" />
+<script type="text/javascript" src="jquery-1.7.2.min.js"></script>
+<script type="text/javascript">
+var no=1;
+var steps=[18,34,51,68,80];
+var mainTimer; 
+var start;
+var end;
+
+function preloadImages() {
+	var preloadImg=['images/car/001.jpg' , 'images/car/002.jpg' , 'images/car/003.jpg' , 'images/car/004.jpg' , 'images/car/005.jpg' , 'images/car/006.jpg' , 'images/car/007.jpg' , 'images/car/008.jpg' , 'images/car/009.jpg' , 'images/car/010.jpg' , 'images/car/011.jpg' , 'images/car/012.jpg' , 'images/car/013.jpg' , 'images/car/014.jpg' , 'images/car/015.jpg' , 'images/car/016.jpg' , 'images/car/017.jpg' , 'images/car/018.jpg' , 'images/car/019.jpg' , 'images/car/020.jpg' , 'images/car/021.jpg' , 'images/car/022.jpg' , 'images/car/023.jpg' , 'images/car/024.jpg' , 'images/car/025.jpg' , 'images/car/026.jpg' , 'images/car/027.jpg' , 'images/car/028.jpg' , 'images/car/029.jpg' , 'images/car/030.jpg' , 'images/car/031.jpg' , 'images/car/032.jpg' , 'images/car/033.jpg' , 'images/car/034.jpg' , 'images/car/035.jpg' , 'images/car/036.jpg' , 'images/car/037.jpg' , 'images/car/038.jpg' , 'images/car/039.jpg' , 'images/car/040.jpg' , 'images/car/041.jpg' , 'images/car/042.jpg' , 'images/car/043.jpg' , 'images/car/044.jpg' , 'images/car/045.jpg' , 'images/car/046.jpg' , 'images/car/047.jpg' , 'images/car/048.jpg' , 'images/car/049.jpg' , 'images/car/050.jpg' , 'images/car/051.jpg' , 'images/car/052.jpg' , 'images/car/053.jpg' , 'images/car/054.jpg' , 'images/car/055.jpg' , 'images/car/056.jpg' , 'images/car/057.jpg' , 'images/car/058.jpg' , 'images/car/059.jpg' , 'images/car/060.jpg' , 'images/car/061.jpg' , 'images/car/062.jpg' , 'images/car/063.jpg' , 'images/car/064.jpg' , 'images/car/065.jpg' , 'images/car/066.jpg' , 'images/car/067.jpg' , 'images/car/068.jpg' , 'images/car/069.jpg' , 'images/car/070.jpg' , 'images/car/071.jpg' , 'images/car/072.jpg' , 'images/car/073.jpg' , 'images/car/074.jpg' , 'images/car/075.jpg' , 'images/car/076.jpg' , 'images/car/077.jpg' , 'images/car/078.jpg' , 'images/car/079.jpg' , 'images/car/080.jpg'];
+	var imgs=[];
+	for (var i=0;i<preloadImg.length;i++) {
+		imgs[i]=new Image();
+		imgs[i].src=preloadImg[i];
+	}
+}
+
+function chgImgR(a,b) {
+	clearTimeout(mainTimer);
+	if (a!=b) {
+		var c=a+1;
+		if (a < 10) {
+			a='0'+a;
+		}
+		if (c < 10) {
+			c='0'+c;
+		}
+		$('#frameDisplay img').attr('src',$('#frameDisplay img').attr('src').replace(a,c));
+		mainTimer=setTimeout('chgImgR('+c+', '+b+')', 100/3);
+		if (c==b) {
+			btn();
+		}
+	}
+}
+function chgImgL(a,b) {
+	clearTimeout(mainTimer);
+	if (a!=b) {
+		var c=a-1;
+		if (a < 10) {
+			a='0'+a;
+		}
+		if (c < 10) {
+			c='0'+c;
+		}
+		$('#frameDisplay img').attr('src',$('#frameDisplay img').attr('src').replace(a,c));
+		if (c=='01') {
+			$('#frameDisplay img').attr('src',$('#frameDisplay img').attr('src').replace('01','80'));
+		}
+		mainTimer=setTimeout('chgImgL('+c+', '+b+')', 100/3);
+		if (c==b) {
+			btn();
+		}
+	}
+}
+
+function btn() {
+	$('#arrRight').bind('click', function() {
+		$('#arrRight').unbind('click');
+		$('#arrLeft').unbind('click');
+		if (no!=steps.length) {
+			start=steps[no-1];
+			end=steps[no];
+			no=no+1;
+		} else {
+			no=1;
+			start=1;
+			end=steps[no-1];
+			$('#frameDisplay img').attr('src',$('#frameDisplay img').attr('src').replace('80','01'));
+		}
+		chgImgR(start, end);
+	});
+	$('#arrLeft').bind('click', function() {
+		$('#arrRight').unbind('click');
+		$('#arrLeft').unbind('click');
+		if (no==1) {
+			start=steps[no-1];
+			end=1;
+			no=5;
+		} else {
+			start=steps[no-1];
+			end=steps[no-2];
+			no=no-1;
+		}
+		chgImgL(start, end);
+	});
+}
+$(document).ready(function() {
+	preloadImages();
+	btn();
+});
+</script>
+</head>
+<style>
+* {margin:0;border:0}
+.wrap {width:1663px;height:1000px;background:url(images/background_velosterRed_01.jpg) no-repeat center;}
+.centerWrap {margin-left:-472px;position:absolute;left:50%;width:944px;height:1000px;}
+#frameDisplay {position:absolute;top:49%;left:50%;margin-top:-177px;margin-left:-364px;z-index:100;}
+#frameControls {position:absolute;top:51%;left:50%;margin-top:38px;margin-left:275px;z-index:100;}
+#arrLeft {position:absolute;cursor:pointer;width:42px;height:41px;background:url('images/arrows_car.png') no-repeat 10px 0px;pointer-events:auto;}
+#cursorText {position:absolute;left:50%;top:9px;font-size:14px;text-align:center;color:#F0F0F0;font-weight:bold;}
+#arrRight {position:absolute;cursor:pointer;width:42px;height:41px;left:100%;background:url('images/arrows_car.png') no-repeat -52px 0px;pointer-events:auto;}
+#arrLeft:hover {background-position:10px -42px;}
+#arrRight:hover {background-position:-52px -42px;}
+</style>
+<body>
+	<div class="wrap">
+		<div class="centerWrap">
+			<div id="frameDisplay">
+				<img src="images/car/018.jpg" alt="">
+			</div>
+			<div id="frameControls" style="">
+				<a id="arrLeft" href="javascript:void(0);"></a>
+				<div id="cursorText" style="left: 54px;">
+					CLICK&nbsp;ARROWS<br><span class="tomove">TO&nbsp;MOVE</span>
+				</div>
+				<a id="arrRight" href="javascript:void(0);" style="left: 175px;"></a>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
